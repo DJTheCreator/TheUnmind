@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckct6miyitd15"]
+
+[ext_resource type="Script" path="res://scripts/Bean/bean_move.gd" id="1_kqf80"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ggtri"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cllds"]
+
+[node name="Bean" type="CharacterBody3D"]
+script = ExtResource("1_kqf80")
+
+[node name="BeanModel" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_ggtri")
+
+[node name="CollisionBean" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0203959, 0)
+shape = SubResource("CapsuleShape3D_cllds")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.948152, 0.317818, 0, -0.317818, 0.948152, 0, 1.70208, 3.02986)

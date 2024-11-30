@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://bo5o5wm67sr5p"]
+
+[ext_resource type="PackedScene" uid="uid://ckct6miyitd15" path="res://scenes/bean.tscn" id="1_fmeui"]
+[ext_resource type="Texture2D" uid="uid://b7vsjtplthqjy" path="res://textures/Small Black and white tile.jpg" id="2_edojp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqpi6"]
+albedo_texture = ExtResource("2_edojp")
+uv1_scale = Vector3(50, 50, 50)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0jloj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mkqy2"]
+size = Vector3(0.223083, 0.479126, 0.228333)
+
+[node name="world" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.80362, 1.22298, 2.15655)
+
+[node name="Bean" parent="." instance=ExtResource("1_fmeui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10139, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_gqpi6")
+mesh = SubResource("PlaneMesh_0jloj")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(8.755, 0, 0, 0, 8.755, 0, 0, 0, 8.755, 0.0141606, -2.09881, -0.00187032)
+shape = SubResource("BoxShape3D_mkqy2")
