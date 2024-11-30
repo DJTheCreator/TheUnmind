@@ -3,7 +3,7 @@ extends CharacterBody3D
 # How fast the player moves in meters per second.
 @export var speed:int = 5
 # The downward acceleration when in the air, in meters per second squared.
-@export var fall_acceleration:int = 75
+@export var fall_acceleration:int = 9.8
 
 @onready var camera_pivot_x:Node3D = %CameraPivotX
 
@@ -17,7 +17,7 @@ func _input(event: InputEvent) -> void:
 		
 		mouse_position = get_viewport().get_mouse_position()
 	
-	if event is InputEventMouseMotion && (Input.is_action_pressed("right_click") || Input.is_action_just_pressed("middle_mouse_click")):
+	if event is InputEventMouseMotion && (Input.is_action_pressed("right_click") || Input.is_action_pressed("middle_mouse_click")):
 		
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		rotate_y(deg_to_rad(-event.relative.x * mouse_sensitivity))
@@ -28,32 +28,34 @@ func _input(event: InputEvent) -> void:
 		
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		Input.warp_mouse(mouse_position)
-	
-	#TODO make the movement based on the camera angle, no x+1 thats for loser babies who should feel bad for using it 
-	# also clamp camera, no 360 spins 
 
 
 func _physics_process(delta):
 	var direction:Vector3 = Vector3.ZERO
 	
 	if Input.is_action_pressed("D_input"):
-		direction.x += 1
+		direction += transform.basis.x
 	if Input.is_action_pressed("A_input"):
-		direction.x -= 1
+		direction += -transform.basis.x
 	if Input.is_action_pressed("S_input"):
-		direction.z += 1
+		direction += transform.basis.z
 	if Input.is_action_pressed("W_input"):
-		direction.z -= 1
+		direction += -transform.basis.z
 		
 	if Input.is_action_pressed("space_press"):
 		direction.y += 1
 	
 	camera_pivot_x.rotation_degrees.x = clampf(camera_pivot_x.rotation_degrees.x, -75, 50.0)
 	
+	if velocity.x != 0 && velocity.z != 0:
+		$BeanModel.rotation = transform.basis.z
+	
 	# Ground Velocity
 	target_velocity.x = direction.x * speed
 	target_velocity.z = direction.z * speed
-	target_velocity.y += direction.y * speed
+	if is_on_floor():
+		target_velocity.y += direction.y * (speed + 2)
+	
 	
 	# Vertical Velocity
 	if !is_on_floor(): # If in the air, fall towards the floor. Literally gravity

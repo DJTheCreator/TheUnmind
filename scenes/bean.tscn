@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckct6miyitd15"]
+[gd_scene load_steps=6 format=3 uid="uid://ckct6miyitd15"]
 
 [ext_resource type="Script" path="res://scripts/Bean/bean_move.gd" id="1_kqf80"]
+[ext_resource type="Texture2D" uid="uid://8gpfa6lnt0qr" path="res://textures/The Unmind.jpg" id="2_wysql"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4loof"]
+albedo_texture = ExtResource("2_wysql")
+uv1_offset = Vector3(0.25, 0, 0)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ggtri"]
+material = SubResource("StandardMaterial3D_4loof")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cllds"]
 
