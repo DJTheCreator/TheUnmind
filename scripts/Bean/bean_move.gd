@@ -1,15 +1,45 @@
 extends CharacterBody3D
 
 # How fast the player moves in meters per second.
-@export var speed = 5
+@export var speed:int = 5
 # The downward acceleration when in the air, in meters per second squared.
-@export var fall_acceleration = 75
+@export var fall_acceleration:int = 75
 
-var target_velocity = Vector3.ZERO
+@onready var camera_pivot_y:Node3D = %CameraPivotY
+@onready var camera_pivot_x:Node3D = %CameraPivotX
 
+var target_velocity:Vector3 = Vector3.ZERO
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion && Input.is_action_pressed("right_click"):
+		camera_pivot_y.rotate_y(deg_to_rad(-event.relative.x))
+		camera_pivot_x.rotate_x(deg_to_rad(event.relative.y))
+
+
+#func cameraControl():
+	
+	#var mouse_current_position:Vector2 = get_viewport().get_mouse_position()
+	#var mouse_previous_position:Vector2
+	#
+	#if Input.is_action_pressed("right_click"):
+		#
+		#if mouse_current_position.x < mouse_previous_position.x:
+			#camera_pivot.rotate_y(deg_to_rad(.5))
+		#if mouse_current_position.x > mouse_previous_position.x:
+			#camera_pivot.rotate_y(deg_to_rad(-.5))
+			#
+		#if mouse_current_position.y < mouse_previous_position.y:
+			#camera_pivot.rotate_x(deg_to_rad(-.5))
+		#if mouse_current_position.y > mouse_previous_position.y:
+			#camera_pivot.rotate_x(deg_to_rad(.5))
+	#
+	#mouse_previous_position = mouse_current_position
+
+#func _process(delta: float) -> void:
+	#cameraControl()
 
 func _physics_process(delta):
-	var direction = Vector3.ZERO
+	var direction:Vector3 = Vector3.ZERO
 
 	if Input.is_action_pressed("D_input"):
 		direction.x += 1
@@ -30,9 +60,12 @@ func _physics_process(delta):
 	target_velocity.y += direction.y * speed
 
 	# Vertical Velocity
-	if not is_on_floor(): # If in the air, fall towards the floor. Literally gravity
+	if !is_on_floor(): # If in the air, fall towards the floor. Literally gravity
 		target_velocity.y = target_velocity.y - (fall_acceleration * delta)
 
 	# Moving the Character
 	velocity = target_velocity
 	move_and_slide()
+
+
+#https://docs.godotengine.org/en/4.3/classes/class_node3d.html
