@@ -5,15 +5,19 @@ extends CharacterBody3D
 # The downward acceleration when in the air, in meters per second squared.
 @export var fall_acceleration:int = 75
 
-@onready var camera_pivot_y:Node3D = %CameraPivotY
 @onready var camera_pivot_x:Node3D = %CameraPivotX
 
 var target_velocity:Vector3 = Vector3.ZERO
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion && Input.is_action_pressed("right_click"):
-		camera_pivot_y.rotate_y(deg_to_rad(-event.relative.x))
-		camera_pivot_x.rotate_x(deg_to_rad(event.relative.y))
+		rotate_y(deg_to_rad(-event.relative.x * .2))
+		$BeanModel.rotate_y(deg_to_rad(event.relative.x * .2))
+		camera_pivot_x.rotate_x(deg_to_rad(event.relative.y * .2))
+		# To get mouse to not move while holding right click use Input.mouse_mode = Input.MOUSE_MODE_CAPTURE
+		# Set the mouse mode back to MOUSE_MODE_VISIBLE (the default setting) after you release right click
+		# You just need to check where the mouse is before they hold down right click and then 
+		# teleport the mouse back to that position after they release right click. Use Input.warp_mouse(pos)
 
 
 #func cameraControl():

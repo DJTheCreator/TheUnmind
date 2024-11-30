@@ -16,13 +16,10 @@ mesh = SubResource("CapsuleMesh_ggtri")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0203959, 0)
 shape = SubResource("CapsuleShape3D_cllds")
 
-[node name="CameraPivotY" type="Node3D" parent="."]
+[node name="CameraPivotX" type="Node3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.04, 0, 0, 0, 1, 0, 0, 0)
 
-[node name="CameraPivotX" type="Node3D" parent="CameraPivotY"]
-unique_name_in_owner = true
-
-[node name="Camera" type="Camera3D" parent="CameraPivotY/CameraPivotX"]
+[node name="Camera" type="Camera3D" parent="CameraPivotX"]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 25, 0, 0, 0, 1, 0, 1.70208, 3.02986)
