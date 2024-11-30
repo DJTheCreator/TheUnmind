@@ -8,39 +8,30 @@ extends CharacterBody3D
 @onready var camera_pivot_x:Node3D = %CameraPivotX
 
 var target_velocity:Vector3 = Vector3.ZERO
+var mouse_sensitivity:float= .2
+var mouse_position:Vector2
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion && Input.is_action_pressed("right_click"):
-		rotate_y(deg_to_rad(-event.relative.x * .2))
-		$BeanModel.rotate_y(deg_to_rad(event.relative.x * .2))
-		camera_pivot_x.rotate_x(deg_to_rad(event.relative.y * .2))
-		# To get mouse to not move while holding right click use Input.mouse_mode = Input.MOUSE_MODE_CAPTURE
-		# Set the mouse mode back to MOUSE_MODE_VISIBLE (the default setting) after you release right click
-		# You just need to check where the mouse is before they hold down right click and then 
-		# teleport the mouse back to that position after they release right click. Use Input.warp_mouse(pos)
-
-
-#func cameraControl():
 	
-	#var mouse_current_position:Vector2 = get_viewport().get_mouse_position()
-	#var mouse_previous_position:Vector2
-	#
-	#if Input.is_action_pressed("right_click"):
-		#
-		#if mouse_current_position.x < mouse_previous_position.x:
-			#camera_pivot.rotate_y(deg_to_rad(.5))
-		#if mouse_current_position.x > mouse_previous_position.x:
-			#camera_pivot.rotate_y(deg_to_rad(-.5))
-			#
-		#if mouse_current_position.y < mouse_previous_position.y:
-			#camera_pivot.rotate_x(deg_to_rad(-.5))
-		#if mouse_current_position.y > mouse_previous_position.y:
-			#camera_pivot.rotate_x(deg_to_rad(.5))
-	#
-	#mouse_previous_position = mouse_current_position
+	if Input.is_action_just_pressed("right_click"):
+		
+		mouse_position = get_viewport().get_mouse_position()
+	
+	if event is InputEventMouseMotion && Input.is_action_pressed("right_click"):
+		
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		rotate_y(deg_to_rad(-event.relative.x * mouse_sensitivity))
+		$BeanModel.rotate_y(deg_to_rad(event.relative.x * mouse_sensitivity))
+		camera_pivot_x.rotate_x(deg_to_rad(event.relative.y * mouse_sensitivity))
+	
+	if Input.is_action_just_released("right_click"):
+		
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		Input.warp_mouse(mouse_position)
+	
+	#TODO make the movement based on the camera angle, no x+1 thats for loser babies who should feel bad for using it 
+	# also clamp camera, no 360 spins 
 
-#func _process(delta: float) -> void:
-	#cameraControl()
 
 func _physics_process(delta):
 	var direction:Vector3 = Vector3.ZERO
@@ -57,7 +48,6 @@ func _physics_process(delta):
 	if Input.is_action_pressed("space_press"):
 		direction.y += 1
 
-
 	# Ground Velocity
 	target_velocity.x = direction.x * speed
 	target_velocity.z = direction.z * speed
@@ -70,6 +60,5 @@ func _physics_process(delta):
 	# Moving the Character
 	velocity = target_velocity
 	move_and_slide()
-
 
 #https://docs.godotengine.org/en/4.3/classes/class_node3d.html
